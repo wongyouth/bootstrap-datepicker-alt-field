@@ -1,23 +1,22 @@
 $(function () {
-  var el = $('input[data-provide="datepicker"]');
+  $("input.datepicker").each((_, item) => {
+    var el = $(item);
 
-  el.datepicker({
-    format: "yyyy年mm月dd日",
-    language: "zh-CN",
-    todayHighlight: true,
-    todayBtn: true,
+    // add alt field for datepicker input
+
+    var name = el.attr("name");
+    // var dateEl = $(`<input type="hidden" name="${name}">`);
+    var dateEl = $(`<input type="text" name="${name}">`);
+
+    el.datepicker({
+      format: "yyyy年mm月dd日",
+      language: "zh-CN",
+    }).on("changeDate", (e) => {
+      dateEl.val(e.format("yyyy-mm-dd"));
+    });
+
+    el.datepicker("setDate", el.val());
+
+    el.parent().append(dateEl);
   });
-
-  // add alt field for datepicker input
-
-  // var realEl = $(`<input type="hidden">`);
-  var realEl = $(`<input type="text">`);
-  realEl.attr("id", el.attr("id")).attr("name", el.attr("name"));
-
-  el.attr("id", "").attr("name", "");
-  el.on("changeDate", (e) => {
-    realEl.val(e.format("yyyy-mm-dd"));
-  });
-  el.before(realEl);
-  el.datepicker("setDate", el.val());
 });
